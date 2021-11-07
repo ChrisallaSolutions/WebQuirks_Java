@@ -1,0 +1,14 @@
+#button { 
+	height: 300px;
+	min-height: 300px;
+	width: 300px;
+	min-width: 300px;
+	text-align: center;
+	margin-left: auto ;
+  	margin-right: auto ;
+}
+#play {
+	height: 100px;
+	width: 500px;
+	margin-top: 35px;	
+}
