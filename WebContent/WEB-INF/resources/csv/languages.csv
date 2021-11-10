@@ -1,2 +1,3 @@
-de;Spieler;Immer wenn;dann;Bitte Anzahl der Spieler auswählen
-en;Player;Whenever;then;Please choose number of players
+de;Spieler;Immer wenn;dann;Bitte Anzahl der Spieler auswählen;Los;nächster Spieler;zeige nächsten Tick;Ende;Neues Spiel
+en;Player;Whenever;then;Please choose number of players;Go;next player;show next quirk;The end;New Game
+fr;Joueur;Whenever;then;Please choose number of players;Allez;next player;show next quirk;The end;New Game

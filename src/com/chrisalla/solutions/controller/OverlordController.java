@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class OverlordController {
 	
-	@RequestMapping(value = "/", method = {RequestMethod.GET}) 
+	@RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST}) 
 	public String getMainPage(Model model) throws Exception {
 		String resultPage = "index";
 		

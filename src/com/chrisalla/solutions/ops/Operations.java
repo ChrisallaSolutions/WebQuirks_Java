@@ -6,29 +6,32 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 
 
 public class Operations {
 
-	private static ArrayList<String> tics;
-	private static ArrayList<String> triggers;
-	public static String textChoose;
+	private static int langNumber;
+	public static ArrayList<String> languages;
+	public static JSONObject languageSet;
 	public static String HOME = System.getProperty("user.dir") + "/eclipse_workspace/WebQuirks/WebContent/WEB-INF/resources";
 	// caution Home path hardcoded
 	
 	public String getQuirks(String language, String numberPlayers) {
 		Operations ops = new Operations();
 		// Set language default "de" and players default 1
-			String lang = language == null? "de" : language;
+		String lang = language == null? "de" : language;
 		int players = numberPlayers == null? 1 : Integer.parseInt(numberPlayers.equals("")? "1" : numberPlayers);
-
+		ArrayList<String> tics;
+		ArrayList<String> triggers;
 		StringBuilder result = new StringBuilder();
-		ArrayList<String> languages = ops.getLanguages();
-		int langNumber = languages.indexOf(lang);
+		languages = ops.getLanguages();
+		langNumber = languages.indexOf(lang);
 		String textPlayer = languages.get(langNumber + 1);
 		String textWhen = languages.get(langNumber + 2);
 		String textThen = languages.get(langNumber + 3);
-		textChoose = languages.get(langNumber + 4);
+		languageSet = fillLanguageSet();
 
 		// Load full list from CSV file
 		tics = ops.getTics(lang);
@@ -62,6 +65,51 @@ public class Operations {
 		return result.toString();
 	}
 
+	public ArrayList<String> getLanguageOptions() {
+		ArrayList<String> result = new ArrayList<String>();
+		for (int i = 0; i < languages.size(); i += 10) {
+			result.add(languages.get(i));
+		}
+		return result;
+	}
+	
+	public String arrangeLanguageDropdown(String lang) {
+		if(lang == null) {
+			lang = "de";
+		}
+		String result = "'<option>" + lang + "</option>'\n";
+		ArrayList<String> languageOptions = getLanguageOptions();
+		for(String l : languageOptions) {
+			if(!l.equals(lang)) {
+				result += "+ '<option>" + l + "</option>'\n";
+			}
+		}
+		return result;
+	}
+
+	public JSONObject fillLanguageSet() {
+		JSONObject result = new JSONObject();
+		result.put("choose_text", languages.get(langNumber + 4));
+		result.put("go_button", languages.get(langNumber + 5));
+		result.put("next_player", languages.get(langNumber + 6));
+		result.put("next_quirk", languages.get(langNumber + 7));
+		result.put("the_end", languages.get(langNumber + 8));
+		result.put("new_game", languages.get(langNumber + 9));
+		return result;
+	}
+	
+	public JSONObject fillLanguageSet(String lang) {
+		langNumber = languages.indexOf(lang);
+		JSONObject result = new JSONObject();
+		result.put("choose_text", languages.get(langNumber + 4));
+		result.put("go_button", languages.get(langNumber + 5));
+		result.put("next_player", languages.get(langNumber + 6));
+		result.put("next_quirk", languages.get(langNumber + 7));
+		result.put("the_end", languages.get(langNumber + 8));
+		result.put("new_game", languages.get(langNumber + 9));
+		return result;
+	}
+
 	private ArrayList<String> shuffleList(ArrayList<String> list) {
 		ArrayList<String> result = new ArrayList<String>();
 		int start = list.size();
@@ -90,13 +138,11 @@ public class Operations {
 
 	private ArrayList<String> getTriggers(String lang) {
 		ArrayList<String> result = CSVReader(HOME + "/csv/triggers_" + lang + ".csv");
-
 		return result;
 	}
 
 	private ArrayList<String> getLanguages() {
 		ArrayList<String> result = CSVReader(HOME + "/csv/languages.csv");
-
 		return result;
 	}
 

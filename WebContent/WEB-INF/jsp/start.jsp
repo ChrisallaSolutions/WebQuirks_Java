@@ -7,61 +7,66 @@
 <!DOCTYPE html>
 
 <html>
-<head>
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="resources/css/main.css" />
-<script type="text/javascript" src="resources/js/main.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-<meta charset="UTF-8">
-<title>WebQuirks</title>
-
-</head>
-<body>
-<div >
-		<button id="button" onclick="nextPlayer()"></button>
-		<div id="play"></div><a href="/WebQuirks"><button id="button2"></button></a>
-	</div>
-<script>
-	var lang = "<%= request.getParameter("lang")%>";
-	var players = "<%= request.getParameter("players")%>";
-	var attn = (lang == "de")? "nächster Spieler" : "next player";
-	var attnQuirk = (lang == "de")? "zeige nächsten Tick" : "show next quirk";
-	var attnEnd = (lang == "de")? "Ende" : "The end";
-	var home = (lang == "de")? "Neues Spiel" : "New game";
+	<head>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="resources/css/main.css" />
+		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<meta charset="UTF-8">
+		<title>WebQuirks</title>
+		<script>
+			let languageSet = <%= operations.fillLanguageSet(request.getParameter("lang"))%>
+		</script>
 	
-	var i = 0;
-	var bool = true;
-	var getQuirks = "<%= operations.getQuirks(request.getParameter("lang"), request.getParameter("players"))%>";
-	console.log(getQuirks);
-
-	var quirks = getQuirks.split(";");
-	console.log(quirks);
-	
-	document.getElementById("button").innerHTML = attnQuirk;
-	document.getElementById("button2").innerHTML = home;
-
-	function nextPlayer() {
-		if (i < players) {
-			if (bool) {
-				document.getElementById("button").innerHTML = attn;
-				document.getElementById("play").innerHTML = quirks[i];
-				i = i + 1;
-				bool = false;
-			} else {
-				document.getElementById("button").innerHTML = attnQuirk;
-				document.getElementById("play").innerHTML = "";
-				bool = true;
+	</head>
+	<body>
+		<div >
+			<button id="button" onclick="nextPlayer()"></button>
+			<div id="play"></div>
+			<form id="form" action="/WebQuirks" method="POST">
+				<input id="lang" type="hidden" name="lang">
+			</form>
+			<button id="button2" onclick="submitForm()"></button>
+		</div>
+		<script>
+			var lang = "<%= request.getParameter("lang")%>";
+			var players = "<%= request.getParameter("players")%>";
+			var attn = languageSet.next_player;
+			var attnQuirk = languageSet.next_quirk;
+			var attnEnd = languageSet.the_end;
+			var home = languageSet.new_game;
+			
+			var i = 0;
+			var bool = true;
+			var getQuirks = "<%= operations.getQuirks(request.getParameter("lang"), request.getParameter("players"))%>";
+			
+			var quirks = getQuirks.split(";");
+			
+			document.getElementById("button").innerHTML = attnQuirk;
+			document.getElementById("button2").innerHTML = home;
+		
+			function nextPlayer() {
+				if (i < players) {
+					if (bool) {
+						document.getElementById("button").innerHTML = attn;
+						document.getElementById("play").innerHTML = quirks[i];
+						i = i + 1;
+						bool = false;
+					} else {
+						document.getElementById("button").innerHTML = attnQuirk;
+						document.getElementById("play").innerHTML = "";
+						bool = true;
+					}
+				} else {
+					document.getElementById("button").innerHTML = attnEnd;
+					document.getElementById("play").innerHTML = "";
+				}
 			}
-		} else {
-			document.getElementById("button").innerHTML = attnEnd;
-			document.getElementById("play").innerHTML = "";
-		}
-	}
-	
-</script>
-	
-	
-</body>
+			function submitForm() {
+				document.getElementById("lang").value = lang;
+				document.getElementById("form").submit();
+			}
+		</script>
+	</body>
 </html>
