@@ -4,8 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-
+import java.util.Properties;
 import org.json.JSONObject;
 
 
@@ -13,12 +14,24 @@ import org.json.JSONObject;
 public class Operations {
 
 	private static int langNumber;
+	private static String HOME = "";
 	public static ArrayList<String> languages;
 	public static JSONObject languageSet;
-	public static String HOME = System.getProperty("user.dir") + "/eclipse_workspace/WebQuirks/WebContent/WEB-INF/resources";
-	// caution Home path hardcoded
+		
+	Properties props = new Properties();
+			
+	private String getProperties(String value) {
+		try {
+			InputStream propsFile = getClass().getClassLoader().getResourceAsStream("WebQuirks.properties");
+			props.load(propsFile);
+		} catch(Exception e) {
+			System.out.println(e);
+		}
+		return props.getProperty(value);
+	}
 	
 	public String getQuirks(String language, String numberPlayers) {
+		HOME = getProperties("homePath");
 		Operations ops = new Operations();
 		// Set language default "de" and players default 1
 		String lang = language == null? "de" : language;
