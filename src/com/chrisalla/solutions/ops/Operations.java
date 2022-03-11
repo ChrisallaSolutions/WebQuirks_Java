@@ -4,12 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Properties;
+
 import org.json.JSONObject;
-
-
 
 public class Operations {
 
@@ -17,25 +14,16 @@ public class Operations {
 	private static String HOME = "";
 	public static ArrayList<String> languages;
 	public static JSONObject languageSet;
-		
-	Properties props = new Properties();
-			
-	private String getProperties(String value) {
-		try {
-			InputStream propsFile = getClass().getClassLoader().getResourceAsStream("WebQuirks.properties");
-			props.load(propsFile);
-		} catch(Exception e) {
-			System.out.println(e);
-		}
-		return props.getProperty(value);
-	}
-	
-	public String getQuirks(String language, String numberPlayers) {
-		HOME = getProperties("homePath");
+
+	public String getQuirks(String language, String numberPlayers) throws IOException {
+
 		Operations ops = new Operations();
+		// removed hard coding of WEB-INF path access
+		HOME = Operations.class.getProtectionDomain().getCodeSource().getLocation().getFile() + "../resources";
+
 		// Set language default "de" and players default 1
-		String lang = language == null? "de" : language;
-		int players = numberPlayers == null? 1 : Integer.parseInt(numberPlayers.equals("")? "1" : numberPlayers);
+		String lang = language == null ? "de" : language;
+		int players = numberPlayers == null ? 1 : Integer.parseInt(numberPlayers.equals("") ? "1" : numberPlayers);
 		ArrayList<String> tics;
 		ArrayList<String> triggers;
 		StringBuilder result = new StringBuilder();
@@ -61,10 +49,9 @@ public class Operations {
 			String output = textPlayer + " " + i + ": " + textWhen + " " + trigger + " " + textThen + " " + tic;
 
 			result.append(output);
-			if(i != players) {
+			if (i != players) {
 				result.append(";");
 			}
-
 
 			if (tics.size() == 0) {
 				tics = ops.getTics(lang);
@@ -85,15 +72,15 @@ public class Operations {
 		}
 		return result;
 	}
-	
+
 	public String arrangeLanguageDropdown(String lang) {
-		if(lang == null) {
+		if (lang == null) {
 			lang = "de";
 		}
 		String result = "'<option>" + lang + "</option>'\n";
 		ArrayList<String> languageOptions = getLanguageOptions();
-		for(String l : languageOptions) {
-			if(!l.equals(lang)) {
+		for (String l : languageOptions) {
+			if (!l.equals(lang)) {
 				result += "+ '<option>" + l + "</option>'\n";
 			}
 		}
@@ -110,7 +97,7 @@ public class Operations {
 		result.put("new_game", languages.get(langNumber + 9));
 		return result;
 	}
-	
+
 	public JSONObject fillLanguageSet(String lang) {
 		langNumber = languages.indexOf(lang);
 		JSONObject result = new JSONObject();
