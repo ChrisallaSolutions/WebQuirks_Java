@@ -24,7 +24,7 @@
 		<div >
 			<button id="button" onclick="nextPlayer()"></button>
 			<div id="play"></div>
-			<form id="form" action="/WebQuirks" method="POST">
+			<form id="form" action="/" method="POST">
 				<input id="lang" type="hidden" name="lang">
 			</form>
 			<button id="button2" onclick="submitForm()"></button>
