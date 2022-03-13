@@ -12,7 +12,6 @@
 		<meta http-equiv="Cache-Control" content="no-cache">
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<link rel="stylesheet" type="text/css" href="resources/css/main.css" />
-		<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 		<meta charset="UTF-8">
 		<title>WebQuirks</title>
 		<script>
